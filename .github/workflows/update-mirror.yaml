@@ -13,7 +13,7 @@ on:
         - warning
         - debug
 jobs:
-  build:
+  upload-artifact:
     runs-on: ubuntu-latest
     steps:
       - name: checkout-repository
@@ -36,7 +36,7 @@ jobs:
         run: |
           tar \
             --dereference --hard-dereference \
-            --directory "$INPUT_PATH" \
+            --directory "{{ github.workspace }}" \
             -cvf "$RUNNER_TEMP/artifact.tar" \
             --exclude=.git \
             --exclude=.github \
@@ -50,8 +50,8 @@ jobs:
         retention-days: 1
         overwrite: true
         if-no-files-found: error
-  deploy:
-    needs: build
+  deploy-artifact:
+    needs: upload-artifact
     permissions:
       pages: write
       id-token: write
