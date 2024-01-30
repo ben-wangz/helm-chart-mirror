@@ -1,0 +1,40 @@
+name: update-mirror
+
+on:
+  workflow_dispatch: 
+    inputs:
+      logLevel:
+        description: 'log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+jobs:
+  update-mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+      - name: update-mirror
+        uses: addnab/docker-run-action@v3
+        with:
+          registry: gcr.io
+          image: ghcr.io/ben-wangz/blog-helm-mirror:main
+          options: -v ${{ github.workspace }}:/app -e CHART_YAML_FILE=/app/charts.yaml -e DESTINATION=/app/charts
+      - name: commit-to-release
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: "charts"
+          author_name: github_actor
+          author_email: ben.wangz@foxmail.com
+          message: "auto update by github actions"
+          new_branch: release
+          pathspec_error_handling: exitImmediately
+          push: true
+          
