@@ -1,17 +1,6 @@
 name: update-mirror
-
 on:
   workflow_dispatch: 
-    inputs:
-      logLevel:
-        description: 'log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
 jobs:
   upload-artifact:
     runs-on: ubuntu-latest
@@ -41,15 +30,15 @@ jobs:
             --exclude=.git \
             --exclude=.github \
             .
-    - name: upload artifact
-      id: upload-artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: helm-chart-mirror-github-pages
-        path: ${{ runner.temp }}/artifact.tar
-        retention-days: 1
-        overwrite: true
-        if-no-files-found: error
+      - name: upload artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-chart-mirror-github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          overwrite: true
+          if-no-files-found: error
   deploy-artifact:
     needs: upload-artifact
     permissions:
