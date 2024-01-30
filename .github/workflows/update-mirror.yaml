@@ -25,7 +25,7 @@ jobs:
         run: |
           tar \
             --dereference --hard-dereference \
-            --directory "{{ github.workspace }}" \
+            --directory "$INPUT_PATH" \
             -cvf "$RUNNER_TEMP/artifact.tar" \
             --exclude=.git \
             --exclude=.github \
