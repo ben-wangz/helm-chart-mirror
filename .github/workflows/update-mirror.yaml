@@ -52,5 +52,7 @@ jobs:
       - name: deploy to gitHub pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: helm-chart-mirror-github-pages
         
           
