@@ -20,7 +20,7 @@ jobs:
           run: /app/mirror.sh
       - name: archive artifact
         env:
-          INPUT_PATH: "."
+          INPUT_PATH: ${{ github.workspace }}
         shell: sh
         run: |
           tar \
