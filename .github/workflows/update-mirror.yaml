@@ -2,8 +2,14 @@ name: update-mirror
 on:
   workflow_dispatch: 
 jobs:
-  upload-artifact:
+  publish-github-pages:
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: checkout-repository
         uses: actions/checkout@v4
@@ -18,29 +24,11 @@ jobs:
           options: -v ${{ github.workspace }}:/code -e CHART_YAML_FILE=/code/charts.yaml -e DESTINATION=/code/charts
           shell: bash
           run: /app/mirror.sh
-      - name: upload artifact
-        id: upload-artifact
-        uses: actions/upload-artifact@v4
+      - name: upload github pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: helm-chart-mirror-github-pages
-          path:  ${{ github.workspace }}
+          path: ${{ github.workspace }}
           retention-days: 1
-          overwrite: true
-          if-no-files-found: error
-  deploy-artifact:
-    needs: upload-artifact
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: helm-chart-mirror-github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
       - name: deploy to gitHub pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          artifact_name: helm-chart-mirror-github-pages
-        
-          
