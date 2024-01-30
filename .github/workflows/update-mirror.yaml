@@ -26,7 +26,7 @@ jobs:
         with:
           registry: gcr.io
           image: ghcr.io/ben-wangz/blog-helm-mirror:main
-          options: -v ${{ github.workspace }}:/app -e CHART_YAML_FILE=/app/charts.yaml -e DESTINATION=/app/charts
+          options: -v ${{ github.workspace }}:/code -e CHART_YAML_FILE=/code/charts.yaml -e DESTINATION=/code/charts
           shell: bash
           run: /app/mirror.sh
       - name: commit-to-release
