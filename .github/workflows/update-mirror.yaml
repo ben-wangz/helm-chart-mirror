@@ -18,24 +18,12 @@ jobs:
           options: -v ${{ github.workspace }}:/code -e CHART_YAML_FILE=/code/charts.yaml -e DESTINATION=/code/charts
           shell: bash
           run: /app/mirror.sh
-      - name: archive artifact
-        env:
-          INPUT_PATH: ${{ github.workspace }}
-        shell: sh
-        run: |
-          tar \
-            --dereference --hard-dereference \
-            --directory "$INPUT_PATH" \
-            -cvf "$RUNNER_TEMP/artifact.tar" \
-            --exclude=.git \
-            --exclude=.github \
-            .
       - name: upload artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: helm-chart-mirror-github-pages
-          path: ${{ runner.temp }}/artifact.tar
+          path:  ${{ github.workspace }}
           retention-days: 1
           overwrite: true
           if-no-files-found: error
