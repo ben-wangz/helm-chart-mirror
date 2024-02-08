@@ -13,4 +13,6 @@
 - name: nginx
   version: 15.9.0
   repo: https://charts.bitnami.com/bitnami
-
+- name: minio
+  version: 5.0.15
+  repo: https://charts.min.io/
